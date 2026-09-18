@@ -1,4 +1,6 @@
-package br.com.fiap.view.gui;
+package br.com.fiap.View.gui;
+
+import br.com.fiap.View.gui.GUICarro;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,8 +49,11 @@ public class GUIPrincipal extends JFrame {
         miCarro.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                GUICarro carro = new GUICarro();
                 // objeto do painel carro
                 contentPane.removeAll();
+                // adiciona o painel carro
+                contentPane.add(carro);
                 // adiciona o painel carro
                 contentPane.validate();
             }
