@@ -1,5 +1,7 @@
 package br.com.fiap.View.gui;
 
+import br.com.fiap.Controller.CarroController;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -79,7 +81,24 @@ public class GUICarro extends JPanel {
         liCor.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
+                imagem1 = new ImageIcon(getClass().getResource("colors/" + liCor.getSelectedValue() + ".png"));
+            }
+        });
 
+        btCancelar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CarroController carroController = new CarroController();
+                try {
+                    if (tfPlaca.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Digite a placa");
+                        tfPlaca.requestFocus();
+                    } else {
+
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
             }
         });
     }
