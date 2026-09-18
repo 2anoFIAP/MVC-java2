@@ -8,6 +8,8 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GUICarro extends JPanel {
     private JLabel lbPlaca, lbCor, lbDescricao, lbImagem;
@@ -85,7 +87,7 @@ public class GUICarro extends JPanel {
             }
         });
 
-        btCancelar.addActionListener(new ActionListener() {
+        btApaga.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 CarroController carroController = new CarroController();
@@ -94,13 +96,97 @@ public class GUICarro extends JPanel {
                         JOptionPane.showMessageDialog(null, "Digite a placa");
                         tfPlaca.requestFocus();
                     } else {
-
+                        JOptionPane.showMessageDialog(null, carroController.excluir(tfPlaca.getText()));
+                        limpaFormulario();
                     }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage());
                 }
             }
         });
+
+        btNovo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CarroController carroController = new CarroController();
+                try {
+                    if (tfPlaca.getText().isEmpty() || liCor.isSelectionEmpty() || tfDescricao.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Preencha todos os campos");
+                    } else {
+                        JOptionPane.showMessageDialog(null, carroController.inserir(tfPlaca.getText(), liCor.getSelectedValue(), tfDescricao.getText()));
+                        limpaFormulario();
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
+            }
+        });
+
+        btAtualiza.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CarroController carroController = new CarroController();
+                try {
+                    if (tfPlaca.getText().isEmpty() || liCor.isSelectionEmpty() || tfDescricao.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Preencha todos os campos");
+                    } else {
+                        JOptionPane.showMessageDialog(null, carroController.alterar(tfPlaca.getText(), liCor.getSelectedValue(), tfDescricao.getText()));
+                        limpaFormulario();
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
+            }
+        });
+
+        btPesquisa.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CarroController carroController = new CarroController();
+                try {
+                    if (tfPlaca.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Digite a placa");
+                        tfPlaca.requestFocus();
+                    } else {
+                        String carro = carroController.listarUm(tfPlaca.getText());
+                        Pattern pattern = Pattern.compile("Cor: (.*)");
+                        Matcher matcher = pattern.matcher(carro);
+                        String cor;
+                        if (matcher.find()) {
+                            cor = matcher.group(1);
+                        } else {
+                            cor = null;
+                        }
+                        ImageIcon icone = new ImageIcon();
+                        if (cor != null) {
+                            if (cor.equals("amarelo")) {
+                                icone = new ImageIcon(getClass().getResource("colors/amarelo.png"));
+                            } else if (cor.equals("azul")) {
+                                icone = new ImageIcon(getClass().getResource("colors/azul.png"));
+                            } else if (cor.equals("branco")) {
+                                icone = new ImageIcon(getClass().getResource("colors/branco.png"));
+                            } else if (cor.equals("vermelho")) {
+                                icone = new ImageIcon(getClass().getResource("colors/vermelho.png"));
+                            } else {
+                                icone = null;
+                            }
+                        }
+                        JOptionPane.showMessageDialog(null, carro, "Carro", JOptionPane.INFORMATION_MESSAGE, icone);
+                        limpaFormulario();
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
+            }
+        });
+
+    }
+
+    private void limpaFormulario() {
+        tfPlaca.setText("");
+        tfDescricao.setText("");
+        lbImagem.setIcon(null);
+        liCor.clearSelection();
     }
 
 
